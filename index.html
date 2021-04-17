@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+<title>Finances</title>
+<script src="stocks.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<style>
+body {
+  font-family: Arial;
+}
+
+.split {
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.left {
+  left: 0;
+  background-color: #b6e3fc;
+}
+
+.right {
+  right: 0;
+  background-color: #b6fcc5;
+}
+
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.centered img {
+  width: 150px;
+  border-radius: 50%;
+}
+</style>
+</head>
+
+<body>
+
+<div id = "tableWrapperADX" class="split left">
+<input type="text" placeholder="Enter symbol " id="symbol">
+<button onclick="request()">
+        Get Data
+</button>
+	<table id="myTableADX" class="table table-borderless table-striped table-earning">
+	  <thead>
+		<tr>
+		  <th>ADX</th>
+		  <th>date</th>
+		</tr>
+	  </thead>
+	  <tbody id="testBodyADX"></tbody>
+	</table>
+</div>
+
+<div id = "tableWrapper" class="split right">
+	<table id="myTable" class="table table-borderless table-striped table-earning">
+	  <thead>
+		<tr>
+		  <th>open</th>
+		  <th>high</th>
+		  <th>low</th>
+		  <th>close</th>
+		  <th>volume</th>
+		  <th>date</th>
+		</tr>
+	  </thead>
+	  <tbody id="testBody"></tbody>
+	</table>
+</div>
+	
+<script>
+	var stocks = new Stocks('XXXXXXXXXXXXXXXXXXXX'); // Your API key here
+
+	//get the stock data of input symbol for the last 10 minutes
+	async function request () {
+		$("#myTable tbody tr").remove();
+		$("#myTableADX tbody tr").remove();
+	  let symbol = document.getElementById("symbol").value;
+	  
+	  //get results
+	  var result = await stocks.timeSeries({
+		symbol: symbol,
+		interval: '1min',
+		amount: 10
+	   });
+	
+	var ADX = await stocks.technicalIndicator({
+	  symbol: symbol,
+	  interval: 'monthly',
+	  indicator: 'ADX',
+	  time_period: 10,
+		amount: 10
+	})
+	   //populate table
+	   const table = document.getElementById("testBody");
+	   result.forEach( item => {
+			let row = table.insertRow();
+			
+		    let open = row.insertCell(0);
+			open.innerHTML = item["open"];
+		    let high = row.insertCell(1);
+			high.innerHTML = item["high"]
+		    let low = row.insertCell(2);
+			low.innerHTML = item["low"];
+		    let close = row.insertCell(3);
+			close.innerHTML = item["close"]
+		    let volume = row.insertCell(4);
+			volume.innerHTML = item["volume"];
+		    let date = row.insertCell(5);
+			date.innerHTML = item["date"];
+		});//populate table
+		
+	   const tableADX = document.getElementById("testBodyADX");
+	   ADX.forEach( item => {
+			let row = tableADX.insertRow();
+			
+		    let adx = row.insertCell(0);
+			adx.innerHTML = item["ADX"];
+		    let date = row.insertCell(1);
+			date.innerHTML = item["date"];
+		});
+	}
+	request();
+</script>
+</body>
