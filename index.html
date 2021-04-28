@@ -1,183 +1,56 @@
 <!DOCTYPE HTML>
 <html>
-<head>
-<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-<meta content="utf-8" http-equiv="encoding">
-<title>Finances</title>
-<script src="stocks.js"></script>
-<script src="plotly-latest.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-<style>
-body {
-  font-family: Arial;
-}
+	<head>
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf-8" http-equiv="encoding">
+		<title>Finances</title>
+		<script src="stocks.js"></script>
+		<script src="plotly-latest.min.js"></script>	
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+		<link rel="stylesheet" href="style.css">
+	</head>
 
-div {
-  margin: 0px;
-  padding: 0px;
-}
-#mainContainer {
-  position: relative;
-  height: 100%;
-  width: 100%;
-}
-
-#topContainer {
-  border: 1px solid red;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  bottom: 100px;
-  height: calc(100% - 100);
-  width: 100%;
-}
-#bottomContainer {
-  border: 1px solid blue;
-  position: absolute;
-  left: 0px;
-  width: 100%;
-}
-
-.centered {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-}
-
-.centered img {
-  width: 150px;
-  border-radius: 50%;
-}
-</style>
-</head>
-
-<body>
-<div id="mainContainer">
-	<div id = "graphWrapper" id="topContainer">
-	<input type="text" placeholder="Enter symbol " id="symbol">
-	<button onclick="request()">
-			Get Data
-	</button>
-	<div id="tester" style="width:600px;height:250px;"></div>
+	<body>
+	<div id="tester" class="centered" ></div>
+	<div id="inputWrapper">
+		<input type="text" placeholder="Enter symbol " id="symbol">
+			<button id="button" onclick="request()">
+				Get Data
+			</button>
+		</input>
+	
 	</div>
-
-	<div id="bottomContainer">
-		<table id="myTable" class="table table-borderless table-striped table-earning">
-		  <thead>
+	<div id="loading" class="lds-dual-ring"></div>
+	<div id = "tableWrapperADX" >
+		<table id="myTableADX" class="table table-borderless table-striped table-earning">
+		<thead>
 			<tr>
-			  <th>open</th>
-			  <th>high</th>
-			  <th>low</th>
-			  <th>close</th>
-			  <th>volume</th>
-			  <th>date</th>
+			<th>ADX</th>
+			<th>date</th>
 			</tr>
-		  </thead>
-		  <tbody id="testBody"></tbody>
+		</thead>
+		<tbody id="testBodyADX"></tbody>
 		</table>
 	</div>
-</div>
+
+	<div id = "tableWrapper" >
+		<table id="myTable" class="table table-borderless table-striped table-earning">
+		<thead>
+			<tr>
+			<th>open</th>
+			<th>high</th>
+			<th>low</th>
+			<th>close</th>
+			<th>volume</th>
+			<th>date</th>
+			</tr>
+		</thead>
+		<tbody id="testBody"></tbody>
+		</table>
+		
 	
-<script>
-	var stocks = new Stocks('QQ2A275X35V32WRP'); // Mark Galesis API Key
-	
-	   
-
-	//get the stock data of input symbol for the last 10 minutes
-	async function request () {
-	var openArr = [];
-	   var highArr = [];
-	   var lowArr = [];
-	   var closeArr = [];
-	   var volumeArr = [];
-	   var dateArr = [];
-		$("#myTable tbody tr").remove();
-	  let symbol = document.getElementById("symbol").value;
-	  
-	  //get results
-	  var result = await stocks.timeSeries({
-		symbol: symbol,
-		interval: 'daily',
-		amount: 50
-	   });
-	   
-	   //populate table
-	   const table = document.getElementById("testBody");
-	   result.forEach( item => {
-			
-			let row = table.insertRow();
-			
-		    let open = row.insertCell(0);
-			open.innerHTML = item["open"];
-			openArr.push(item["open"]);
-		    let high = row.insertCell(1);
-			high.innerHTML = item["high"]
-			highArr.push(item["high"]);
-		    let low = row.insertCell(2);
-			low.innerHTML = item["low"];
-			lowArr.push(item["low"]);
-		    let close = row.insertCell(3);
-			close.innerHTML = item["close"]
-			closeArr.push(item["close"]);
-		    let volume = row.insertCell(4);
-			volume.innerHTML = item["volume"];
-			volumeArr.push(item["volume"]);
-		    let date = row.insertCell(5);
-			date.innerHTML = item["date"];
+	</div>
 		
-			var d = new Date(item["date"]);
-			var datestring = d.toISOString().slice(0,10);
-			dateArr.push(datestring);
-		});
-		
-		var open = {
-		  type: "scatter",
-		  mode: "lines",
-		  name: symbol + ' Open',
-		  x: dateArr.reverse(),
-		  y: openArr.reverse(),
-		  line: {color: '#17BECF'}
-		}
-		
-		var high = {
-		  type: "scatter",
-		  mode: "lines",
-		  name: symbol + ' High',
-		  x: dateArr.reverse(),
-		  y: highArr.reverse(),
-		  line: {color: '#98ee4e'}
-		}
-
-		var low = {
-		  type: "scatter",
-		  mode: "lines",
-		  name: symbol + ' Low',
-		  x: dateArr.reverse(),
-		  y: lowArr.reverse(),
-		  line: {color: '#ee834e'}
-		}
-		
-		var close = {
-		  type: "scatter",
-		  mode: "lines",
-		  name: symbol + ' Close',
-		  x: dateArr.reverse(),
-		  y: closeArr.reverse(),
-		  line: {color: '#a63482'}
-		}
-		
-		var layout = {
-		  title: symbol + "50 day summary",
-		};
-		
-
-		var data = [open, high, low, close];
-
-		Plotly.newPlot('tester', data, layout);
-	}
-	request();
-</script>
-
-</body>
+	<script src="main.js"></script>
+	</body>
+</html>
