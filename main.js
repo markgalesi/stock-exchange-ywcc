@@ -57,7 +57,7 @@ function request() {
 	  highArr.push(item["high"]);
       let low = row.insertCell(2);
       low.innerHTML = item["low"];
-	  low.innerHTML = item["low"];
+	  lowArr.push(item["low"]);
       let close = row.insertCell(3);
       close.innerHTML = item["close"];
 	  closeArr.push(item["close"]);
@@ -82,6 +82,15 @@ function request() {
 	  line: {color: '#17BECF'}
 	}
 
+	var close = {
+	  type: "scatter",
+	  mode: "lines",
+	  name: symbol + ' Close',
+	  x: dateArr.reverse(),
+	  y: closeArr.reverse(),
+	  line: {color: '#a63482'}
+	}
+
 	var high = {
 	  type: "scatter",
 	  mode: "lines",
@@ -98,15 +107,6 @@ function request() {
 	  x: dateArr.reverse(),
 	  y: lowArr.reverse(),
 	  line: {color: '#ee834e'}
-	}
-
-	var close = {
-	  type: "scatter",
-	  mode: "lines",
-	  name: symbol + ' Close',
-	  x: dateArr.reverse(),
-	  y: closeArr.reverse(),
-	  line: {color: '#a63482'}
 	}
 
 	var layout = {

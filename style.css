@@ -10,16 +10,15 @@
 
 .left {
   left: 0;
-  background-color: #b6e3fc;
 }
 
 .right {
   right: 0;
-  background-color: #b6fcc5;
 }
 
 .centered {
   margin: 0 auto;
+  width: 900px;
 }
 
 .centered img {

@@ -12,28 +12,17 @@
 
 	<body>
 	<embed src="static/stonks.mp3" loop="false" autostart="true" hidden="true">
-	<div id="tester" class="centered" ></div>
 	<div id="inputWrapper">
 		<input type="text" placeholder="Enter symbol " id="symbol">
 			<button id="button" onclick="request()">
 				Get Data
 			</button>
 		</input>
+	</div>
 	
-	</div>
+	<div id="tester" class="centered" ></div>
 	<div id="loading" class="lds-dual-ring"></div>
-	<div id = "tableWrapperADX" >
-		<table id="myTableADX" class="table table-borderless table-striped table-earning">
-		<thead>
-			<tr>
-			<th>ADX</th>
-			<th>date</th>
-			</tr>
-		</thead>
-		<tbody id="testBodyADX"></tbody>
-		</table>
-	</div>
-
+	
 	<div id = "tableWrapper" >
 		<table id="myTable" class="table table-borderless table-striped table-earning">
 		<thead>
@@ -48,9 +37,21 @@
 		</thead>
 		<tbody id="testBody"></tbody>
 		</table>
-		
-	
 	</div>
+	
+	<div id = "tableWrapperADX" >
+		<table id="myTableADX" class="table table-borderless table-striped table-earning">
+		<thead>
+			<tr>
+			<th>ADX</th>
+			<th>date</th>
+			</tr>
+		</thead>
+		<tbody id="testBodyADX"></tbody>
+		</table>
+	</div>
+
+	
 		
 	<script src="main.js"></script>
 	</body>
