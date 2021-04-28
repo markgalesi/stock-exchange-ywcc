@@ -139,7 +139,8 @@ function request() {
 
 	var plot = [open, high, low, close];
 
-	Plotly.newPlot('tester', plot, layout);
+
+	Plotly.newPlot('tester', plot, layout, {displayModeBar: false});
 
     //populate table
     const tableADX = document.getElementById("testBodyADX");
