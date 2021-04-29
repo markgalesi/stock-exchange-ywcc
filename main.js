@@ -65,11 +65,11 @@ function request() {
       volume.innerHTML = item["volume"];
 	  volumeArr.push(item["volume"]);
       let date = row.insertCell(5);
-      date.innerHTML = item["date"];
 
       var d = new Date(item["date"]);
 	  var datestring = d.toISOString().slice(0,10);
 	  dateArr.push(datestring);
+      date.innerHTML = datestring
     });
 
 
