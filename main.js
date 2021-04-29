@@ -149,8 +149,14 @@ function request() {
 
       let adx = row.insertCell(0);
       adx.innerHTML = item["ADX"];
+	  
+	  
+
+      var d = new Date(item["date"]);
+	  var datestring = d.toISOString().slice(0,10);
+	  
       let date = row.insertCell(1);
-      date.innerHTML = item["date"];
+      date.innerHTML = datestring
     });
 
     //Hide loader, show data
